@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mock Test Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #f9f6ff;
+      color: #4b0082;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #4b0082;
+    }
+    .hidden {
+      display: none;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      width: 100%;
+      background-color: #6a0dad;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    button:hover {
+      background-color: #5a008d;
+    }
+    select, input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    #verifyMsg {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="step1">
+    <h1>Welcome to Mock Registration</h1>
+    <button onclick="goToVerification()">Proceed to Registration</button>
+  </div>
+
+  <div id="step2" class="hidden">
+    <h2>Enter Your Phone Number</h2>
+    <input type="text" id="phoneInput" placeholder="e.g. +998901234567" />
+    <button onclick="verifyPhone()">Verify</button>
+    <p id="verifyMsg" style="color:red;"></p>
+  </div>
+
+  <div id="step3" class="hidden">
+    <h2>Choose Your Speaking Time</h2>
+    <select id="timeSlotSelect"></select>
+    <button onclick="goToConfirmation()">Next</button>
+  </div>
+
+  <div id="step4" class="hidden">
+    <h2>Confirm Your Selection</h2>
+    <p><strong>Phone Number:</strong> <span id="confPhone"></span></p>
+    <p><strong>Chosen Time:</strong> <span id="confTime"></span></p>
+    <button onclick="submitBooking()">Submit</button>
+  </div>
+
+  <div id="step5" class="hidden">
+    <h2>Thank You!</h2>
+    <p>Your speaking time has been successfully booked.</p>
+  </div>
+
+  <script>
+    const allowedPhones = ["+998901234567", "+998912345678"];
+    const availableSlots = [
+      "Sunday 10:00 AM",
+      "Sunday 10:15 AM",
+      "Sunday 10:30 AM",
+      "Sunday 10:45 AM"
+    ];
+
+    let userPhone = "";
+    let userTime = "";
+
+    const phoneInput = document.getElementById("phoneInput");
+    const verifyMsg = document.getElementById("verifyMsg");
+    const timeSlotSelect = document.getElementById("timeSlotSelect");
+
+    function goToVerification() {
+      document.getElementById("step1").classList.add("hidden");
+      document.getElementById("step2").classList.remove("hidden");
+    }
+
+    function verifyPhone() {
+      const input = phoneInput.value.trim();
+      if (allowedPhones.includes(input)) {
+        userPhone = input;
+        verifyMsg.textContent = "";
+        document.getElementById("step2").classList.add("hidden");
+        loadAvailableSlots();
+        document.getElementById("step3").classList.remove("hidden");
+      } else {
+        verifyMsg.textContent = "Phone number not registered for this mock test.";
+      }
+    }
+
+    function loadAvailableSlots() {
+      timeSlotSelect.innerHTML = "";
+      availableSlots.forEach(slot => {
+        const option = document.createElement("option");
+        option.value = slot;
+        option.textContent = slot;
+        timeSlotSelect.appendChild(option);
+      });
+    }
+
+    function goToConfirmation() {
+      userTime = timeSlotSelect.value;
+      document.getElementById("confPhone").textContent = userPhone;
+      document.getElementById("confTime").textContent = userTime;
+      document.getElementById("step3").classList.add("hidden");
+      document.getElementById("step4").classList.remove("hidden");
+    }
+
+    function submitBooking() {
+      // In a real app, you would send this data to a server or database.
+      console.log("Booking submitted:", userPhone, userTime);
+      document.getElementById("step4").classList.add("hidden");
+      document.getElementById("step5").classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>
